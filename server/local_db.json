@@ -1,0 +1,220 @@
+{
+  "categories": [
+    {
+      "id": "programming",
+      "name": "Dasturlash va IT",
+      "slug": "programming",
+      "icon": "Code2",
+      "color": "bg-emerald-600",
+      "coursesCount": 32
+    },
+    {
+      "id": "english",
+      "name": "Xorijiy tillar (IELTS / CEFR)",
+      "slug": "english",
+      "icon": "Languages",
+      "color": "bg-blue-600",
+      "coursesCount": 28
+    },
+    {
+      "id": "design",
+      "name": "Grafik dizayn va 3D",
+      "slug": "design",
+      "icon": "Palette",
+      "color": "bg-purple-600",
+      "coursesCount": 19
+    },
+    {
+      "id": "business",
+      "name": "Biznes va Marketing",
+      "slug": "business",
+      "icon": "TrendingUp",
+      "color": "bg-amber-600",
+      "coursesCount": 24
+    },
+    {
+      "id": "math",
+      "name": "Aniq fanlar va Matematika",
+      "slug": "math",
+      "icon": "Calculator",
+      "color": "bg-teal-600",
+      "coursesCount": 15
+    },
+    {
+      "id": "crafts",
+      "name": "Hunarmandchilik",
+      "slug": "crafts",
+      "icon": "Hammer",
+      "color": "bg-amber-700",
+      "coursesCount": 12
+    },
+    {
+      "id": "cooking",
+      "name": "Pazandalik va Taomlar",
+      "slug": "cooking",
+      "icon": "UtensilsCrossed",
+      "color": "bg-orange-600",
+      "coursesCount": 16
+    },
+    {
+      "id": "mechanics",
+      "name": "Mexanika va Avtoservis",
+      "slug": "mechanics",
+      "icon": "Wrench",
+      "color": "bg-slate-700",
+      "coursesCount": 10
+    }
+  ],
+  "courses": [
+    {
+      "id": "course-1",
+      "title": "Fullstack JavaScript: Node.js, Express & React",
+      "category": "programming",
+      "categoryName": "Dasturlash",
+      "categoryColor": "bg-emerald-600",
+      "instructor": "Sardorbek Islomov",
+      "instructorRole": "Lead Frontend Developer",
+      "instructorAvatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200",
+      "rating": 4.95,
+      "reviewsCount": 840,
+      "price": 199000,
+      "originalPrice": 350000,
+      "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&q=80&w=800",
+      "level": "Barcha darajalar",
+      "duration": "45 soat",
+      "lessonsCount": 54,
+      "enrolledCount": 3200,
+      "description": "Noldan to professional darajagacha zamonaviy veb-ilovalarni yaratish, REST API, ma'lumotlar bazasi va frontend integratsiyasi.",
+      "highlights": [
+        "Real loyihalar ustida ishlash",
+        "Git & GitHub amaliyoti",
+        "Vite & Next.js asoslari",
+        "PostgreSQL bilan ishlash"
+      ]
+    },
+    {
+      "id": "course-2",
+      "title": "IELTS 7.5+ ga tayyorlov: Writing & Speaking Masterclass",
+      "category": "english",
+      "categoryName": "Ingliz tili",
+      "categoryColor": "bg-blue-600",
+      "instructor": "Nodira Qodirova",
+      "instructorRole": "IELTS 8.5 Instruktor",
+      "instructorAvatar": "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=200",
+      "rating": 4.9,
+      "reviewsCount": 1200,
+      "price": 160000,
+      "originalPrice": 290000,
+      "thumbnail": "https://images.unsplash.com/photo-1546410531-bb4caa6b424d?auto=format&fit=crop&q=80&w=800",
+      "level": "O'rta",
+      "duration": "32 soat",
+      "lessonsCount": 40,
+      "enrolledCount": 4100,
+      "description": "Writing Task 1 va 2 bo'yicha 7+ andozalar, jonli intervyular va Speaking bo'yicha erkin so'zlashuv metodikasi.",
+      "highlights": [
+        "20 ta mock imtihon tahlili",
+        "Eksklyuziv so'z boyligi lug'ati",
+        "Ustozdan shaxsiy fidbek"
+      ]
+    },
+    {
+      "id": "course-15",
+      "title": "Avtomexanika va dvigatellar diagnostikasi",
+      "category": "mechanics",
+      "categoryName": "Mexanika",
+      "categoryColor": "bg-slate-700",
+      "instructor": "Akmaljon Vohidov",
+      "instructorRole": "Bosh avtomexanik & Diagnostika ustasi",
+      "instructorAvatar": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=200",
+      "rating": 4.9,
+      "reviewsCount": 460,
+      "price": 220000,
+      "originalPrice": 380000,
+      "thumbnail": "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&q=80&w=800",
+      "level": "Barcha darajalar",
+      "duration": "36 soat",
+      "lessonsCount": 42,
+      "enrolledCount": 1670,
+      "description": "Ichki yonuv dvigatellari, kompyuter diagnostikasi (OBD-2), yonilg'i va tormoz tizimi nosozliklarini aniqlash hamda ta'mirlash.",
+      "highlights": [
+        "Kompyuter diagnostikasi sirlari",
+        "Dvigatel qismlarini yig'ish-buzish",
+        "Elektrotizim va datchiklar testi"
+      ]
+    }
+  ],
+  "orders": [
+    {
+      "id": "ORD-9814",
+      "customerName": "Sinov Foydalanuvchi",
+      "customerPhone": "+998 90 999-88-77",
+      "customerEmail": "",
+      "totalAmount": 199000,
+      "paymentMethod": "click",
+      "status": "tasdiqlangan",
+      "notes": "",
+      "items": [
+        {
+          "id": "1",
+          "courseId": "course-1",
+          "title": "Fullstack JS",
+          "price": 199000,
+          "quantity": 1,
+          "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97"
+        }
+      ],
+      "createdAt": "2026-10-10T12:29:27.680Z",
+      "updatedAt": "2026-10-10T12:29:54.325Z"
+    },
+    {
+      "id": "ORD-1001",
+      "customerName": "Alisher Usmonov",
+      "customerPhone": "+998 90 555-12-34",
+      "customerEmail": "alisher@example.com",
+      "totalAmount": 199000,
+      "paymentMethod": "click",
+      "status": "tasdiqlangan",
+      "notes": "Iltimos dars materiallarini telegramga yuboring",
+      "createdAt": "2026-10-10T07:18:00.334Z",
+      "items": [
+        {
+          "id": "item-1",
+          "courseId": "course-1",
+          "title": "Fullstack JavaScript: Node.js, Express & React",
+          "price": 199000,
+          "quantity": 1,
+          "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&q=80&w=800"
+        }
+      ]
+    },
+    {
+      "id": "ORD-1002",
+      "customerName": "Malika Karimova",
+      "customerPhone": "+998 93 444-88-99",
+      "customerEmail": "malika.k@gmail.com",
+      "totalAmount": 380000,
+      "paymentMethod": "payme",
+      "status": "kutilmoqda",
+      "notes": "Karta orqali to'lov qilindi",
+      "createdAt": "2026-10-10T10:18:00.335Z",
+      "items": [
+        {
+          "id": "item-2",
+          "courseId": "course-2",
+          "title": "IELTS 7.5+ ga tayyorlov",
+          "price": 160000,
+          "quantity": 1,
+          "thumbnail": "https://images.unsplash.com/photo-1546410531-bb4caa6b424d?auto=format&fit=crop&q=80&w=800"
+        },
+        {
+          "id": "item-3",
+          "courseId": "course-15",
+          "title": "Avtomexanika va dvigatellar diagnostikasi",
+          "price": 220000,
+          "quantity": 1,
+          "thumbnail": "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&q=80&w=800"
+        }
+      ]
+    }
+  ]
+}
