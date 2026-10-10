@@ -82,28 +82,40 @@ export function App() {
   // Gigs state (allows adding new skills)
   const [gigs, setGigs] = useState<SkillGig[]>(SKILL_GIGS);
 
-  // User State
-  const [userState, setUserState] = useState<UserState>({
-    name: 'Jasur Aliyev',
-    email: 'jasur.developer@gmail.com',
-    phone: '+998 90 123-45-67',
-    role: 'student',
-    balance: 450000,
-    savedItemIds: ['course-1', 'course-2'],
-    bookings: [
-      {
-        id: 'book-1',
-        type: 'mentor_session',
-        title: 'Azizbek Rahmonov bilan Frontend Mentorlik',
-        providerName: 'Azizbek Rahmonov',
-        date: '10-Oktabr',
-        time: '19:00 - 20:00',
-        amount: 150000,
-        status: 'tasdiqlangan',
-        meetLink: 'https://meet.ustozpro.uz/room-azizbek-frontend',
-      },
-    ],
+  // User State with LocalStorage persistence
+  const [userState, setUserState] = useState<UserState>(() => {
+    try {
+      const saved = localStorage.getItem('ustoz_user');
+      if (saved) return JSON.parse(saved);
+    } catch {
+      // ignore
+    }
+    return {
+      name: 'Jasur Aliyev',
+      email: 'jasur.developer@gmail.com',
+      phone: '+998 90 123-45-67',
+      role: 'student',
+      balance: 450000,
+      savedItemIds: ['course-1', 'course-2'],
+      bookings: [
+        {
+          id: 'book-1',
+          type: 'mentor_session',
+          title: 'Azizbek Rahmonov bilan Frontend Mentorlik',
+          providerName: 'Azizbek Rahmonov',
+          date: '10-Oktabr',
+          time: '19:00 - 20:00',
+          amount: 150000,
+          status: 'tasdiqlangan',
+          meetLink: 'https://meet.ustozpro.uz/room-azizbek-frontend',
+        },
+      ],
+    };
   });
+
+  useEffect(() => {
+    localStorage.setItem('ustoz_user', JSON.stringify(userState));
+  }, [userState]);
 
   // Modal States
   const [bookingItem, setBookingItem] = useState<{
