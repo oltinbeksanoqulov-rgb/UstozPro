@@ -298,14 +298,19 @@ export const Navbar: React.FC<NavbarProps> = ({
               {t.login}
             </button>
 
-            {/* Ro'yxatdan o'tish Button */}
+            {/* Ro'yxatdan o'tish Button with lively animations */}
             <button
               onClick={onOpenRegister}
-              className="group relative bg-[#00875a] hover:bg-[#00704a] active:scale-95 text-white px-3.5 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-bold transition flex items-center space-x-1.5 shadow-md hover:shadow-lg whitespace-nowrap flex-shrink-0 cursor-pointer"
+              className="group relative overflow-hidden bg-gradient-to-r from-emerald-600 to-[#00875a] hover:from-emerald-500 hover:to-[#009b67] active:scale-95 text-white px-3.5 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-extrabold transition-all duration-300 flex items-center space-x-1.5 shadow-md shadow-emerald-700/25 hover:shadow-xl hover:shadow-emerald-600/40 hover:ring-2 hover:ring-emerald-400/50 whitespace-nowrap flex-shrink-0 cursor-pointer"
             >
-              <span className="text-sm group-hover:scale-110 transition-transform">🎒</span>
-              <span>{t.register}</span>
-              <Sparkles className="w-3.5 h-3.5 text-emerald-200 animate-pulse" />
+              {/* Shimmer light beam sweep on hover */}
+              <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none" />
+
+              <span className="text-sm inline-block transform group-hover:scale-125 group-hover:-rotate-12 transition-transform duration-200">
+                🎒
+              </span>
+              <span className="tracking-wide">{t.register}</span>
+              <Sparkles className="w-3.5 h-3.5 text-emerald-200 animate-pulse group-hover:rotate-45 transition-transform duration-300" />
             </button>
           </div>
 
@@ -319,7 +324,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             >
               <ShoppingBag className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
               {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-emerald-600 text-white font-black text-[9px] w-4 h-4 rounded-full flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 bg-emerald-600 text-white font-black text-[9px] w-4.5 h-4.5 rounded-full flex items-center justify-center">
                   {cartCount}
                 </span>
               )}
@@ -347,10 +352,11 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Register icon button on mobile */}
             <button
               onClick={onOpenRegister}
-              className="bg-emerald-700 text-white px-3 py-1.5 rounded-full text-xs font-bold flex items-center space-x-1"
+              className="relative overflow-hidden bg-gradient-to-r from-emerald-700 to-emerald-600 active:scale-95 text-white px-3 py-1.5 rounded-full text-xs font-bold flex items-center space-x-1 shadow-sm transition"
             >
-              <span>🎒</span>
+              <span className="text-xs">🎒</span>
               <span className="hidden sm:inline">{t.register}</span>
+              <Sparkles className="w-3 h-3 text-emerald-200 animate-pulse" />
             </button>
 
             {/* Hamburger Button */}
