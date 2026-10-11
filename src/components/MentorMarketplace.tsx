@@ -35,11 +35,21 @@ export const MentorMarketplace: React.FC<MentorMarketplaceProps> = ({
     if (onlyOnline && !mentor.isOnline) return false;
     if (selectedSkill && !mentor.skills.includes(selectedSkill)) return false;
     if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase();
-      const matchName = mentor.name.toLowerCase().includes(q);
-      const matchTitle = mentor.title.toLowerCase().includes(q);
-      const matchSkill = mentor.skills.some((s) => s.toLowerCase().includes(q));
-      if (!matchName && !matchTitle && !matchSkill) return false;
+      const q = searchQuery.toLowerCase().trim();
+      const tokens = q.split(/\s+/).filter((t) => t.length > 1);
+      const matches = (text?: string) => {
+        if (!text) return false;
+        const lower = text.toLowerCase();
+        if (lower.includes(q)) return true;
+        return tokens.some((tok) => tok.length > 2 && lower.includes(tok));
+      };
+
+      const matchName = matches(mentor.name);
+      const matchTitle = matches(mentor.title);
+      const matchBio = matches(mentor.bio);
+      const matchCategory = matches(mentor.category);
+      const matchSkill = mentor.skills.some((s) => matches(s));
+      if (!matchName && !matchTitle && !matchBio && !matchCategory && !matchSkill) return false;
     }
     return true;
   });

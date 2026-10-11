@@ -9,7 +9,10 @@ import {
   FileText,
   Star,
   Users,
-  BookOpen
+  BookOpen,
+  AlertTriangle,
+  RotateCcw,
+  SearchX
 } from 'lucide-react';
 import { MENTORS, COURSES } from '../data/mockData';
 import { Mentor, Course } from '../types';
@@ -334,16 +337,20 @@ const matchAiMentorAndCourse = (
     let score = 0;
     for (const kw of domain.keywords) {
       const lowerKw = kw.toLowerCase();
-      // Exact substring match (e.g. "osh", "algebrik kasrlar")
-      if (clean.includes(lowerKw)) {
-        score += lowerKw.length > 4 ? 20 : 12;
+      // Phrase or word match
+      if (clean === lowerKw || clean.includes(lowerKw)) {
+        if (lowerKw.length <= 3) {
+          if (words.includes(lowerKw)) score += 20;
+        } else {
+          score += 20;
+        }
       }
       // Word tokens
       for (const w of words) {
         if (w === lowerKw) {
+          score += 25;
+        } else if (w.length >= 4 && (lowerKw.startsWith(w) || w.startsWith(lowerKw))) {
           score += 15;
-        } else if (w.length > 3 && (lowerKw.startsWith(w) || w.startsWith(lowerKw))) {
-          score += 8;
         }
       }
     }
@@ -362,23 +369,40 @@ const matchAiMentorAndCourse = (
     const mName = m.name.toLowerCase();
     const mTitle = m.title.toLowerCase();
     const mCat = m.category.toLowerCase();
-    const mBio = m.bio.toLowerCase();
 
     for (const w of words) {
-      if (mName.includes(w)) mScore += 25;
-      if (mTitle.includes(w)) mScore += 20;
-      if (mCat.includes(w)) mScore += 15;
+      if (w.length < 3) continue;
+      if (mName.split(/\s+/).some((t) => t === w || (w.length >= 4 && t.startsWith(w)))) mScore += 25;
+      if (mTitle.split(/\s+/).some((t) => t === w || (w.length >= 4 && t.startsWith(w)))) mScore += 20;
+      if (mCat === w) mScore += 20;
       for (const sk of m.skills) {
-        const skLower = sk.toLowerCase();
-        if (skLower.includes(w)) mScore += 18;
-        if (w.length > 3 && skLower.includes(w)) mScore += 10;
+        const skTokens = sk.toLowerCase().split(/[\s,]+/);
+        if (skTokens.some((t) => t === w || (w.length >= 4 && (t.startsWith(w) || w.startsWith(t))))) {
+          mScore += 20;
+        }
       }
-      if (mBio.includes(w)) mScore += 6;
     }
     return { mentor: m, score: mScore };
   });
 
   scoredMentors.sort((a, b) => b.score - a.score);
+  const topScore = scoredMentors[0]?.score || 0;
+
+  // IF NO DOMAIN MATCHED AND NO MENTOR SCORED (unrelated query / gibberish)
+  if (highestDomainScore === 0 && topScore === 0) {
+    return {
+      isError: true,
+      errorQuery: rawText.trim(),
+      recommendedMentor: null as unknown as Mentor,
+      recommendedCourse: null as unknown as Course,
+      alternativeMentors: [],
+      roadmap: [],
+      summary: "",
+      domainBadge: "",
+      compatibilityRate: "",
+    };
+  }
+
   const primaryMentor = scoredMentors[0]?.mentor || MENTORS[0];
   const alternativeMentors = scoredMentors
     .slice(1, 4)
@@ -415,6 +439,8 @@ const matchAiMentorAndCourse = (
   const compRate = (97.0 + ((primaryMentor.name.length * 7 + rawText.length * 3) % 25) / 10).toFixed(1) + "%";
 
   return {
+    isError: false,
+    errorQuery: '',
     recommendedMentor: primaryMentor,
     recommendedCourse: primaryCourse,
     alternativeMentors,
@@ -444,6 +470,10 @@ export const AiMentorAssistant: React.FC<AiMentorAssistantProps> = ({
     domainBadge?: string;
     compatibilityRate?: string;
   } | null>(null);
+  const [matcherError, setMatcherError] = useState<{
+    query: string;
+    message: string;
+  } | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
 
   // Chatbot state
@@ -463,12 +493,22 @@ export const AiMentorAssistant: React.FC<AiMentorAssistantProps> = ({
   const executeMatcher = (textToMatch: string) => {
     if (!textToMatch.trim()) return;
     setIsGenerating(true);
+    setMatcherError(null);
 
     setTimeout(() => {
       const result = matchAiMentorAndCourse(textToMatch, timeCommitment);
-      setMatcherResult(result);
+      if (result.isError) {
+        setMatcherResult(null);
+        setMatcherError({
+          query: textToMatch.trim(),
+          message: `Kechirasiz, siz kiritgan "${textToMatch.trim()}" bo'yicha platformamizda mos ustoz yoki yo'nalish topilmadi.`,
+        });
+      } else {
+        setMatcherError(null);
+        setMatcherResult(result);
+      }
       setIsGenerating(false);
-    }, 700);
+    }, 600);
   };
 
   const handleRunMatcher = (e: React.FormEvent) => {
@@ -493,7 +533,7 @@ export const AiMentorAssistant: React.FC<AiMentorAssistantProps> = ({
 
     setTimeout(() => {
       const q = userText.toLowerCase();
-      let reply = "Ajoyib savol! Ushbu mavzuni to'liq o'rganish uchun platformamizdagi tajribali ustozlar bilan 1-on-1 konsultatsiya olishingiz yoki kurslarimizdan foydalanishingiz mumkin.";
+      let reply = "";
 
       if (q.includes('osh') || q.includes('palov') || q.includes('pazanda') || q.includes('ovqat') || q.includes('taom') || q.includes('somsa')) {
         reply = "Osh tayyorlashda eng muhimi — zirvakni to'g'ri qaynatish va guruchni me'yorida damlashdir. 1 kg guruchga 1 kg go'sht, 1 kg sifatli sabzi va 300-350 g yog' olinadi. Zirvak sust olovda 40-50 daqiqa qaynashi lozim. Palovning 10 dan ortiq turlari va restoran darajasida pishirishni mashhur shef Chef Bahriddin Chustiy bilan 1-on-1 amaliy darsda o'rganishingiz mumkin!";
@@ -513,6 +553,8 @@ export const AiMentorAssistant: React.FC<AiMentorAssistantProps> = ({
         reply = "Gitarada kuylash uchun dastlab asosiy 3 ta akkordni (Am, Dm, E) va 4/4 ritmini barmoqlarga o'rgatish kifoya. Professional sozanda Mansurxon Madaminov bilan qisqa muddatda sevimli qo'shiqlaringizni chalishni boshlaysiz.";
       } else if (q.includes('biznes') || q.includes('uzum') || q.includes('savdo') || q.includes('daromad') || q.includes('pul')) {
         reply = "UstozPro da har qanday mutaxassis o'z mahoratini sota oladi! Shuningdek, Uzum Marketda do'kon ochish va savdoni oshirish bo'yicha E-Commerce eksperti Umidbek Jo'rayev bilan 1-on-1 konsultatsiya olishingiz mumkin.";
+      } else {
+        reply = `⚠️ Xatolik: Kechirasiz, siz yozgan "${userText}" bo'yicha platformamizda ma'lumot yoki mos ustoz topilmadi. UstozPro platformasida faqat o'quv fanlari va amaliy mahoratlar mavjud (masalan: Osh damlash, Algebrik kasrlar, Ingliz tili, Dasturlash, Avtomexanika, Musiqa va h.k.). Iltimos, shu yo'nalishlar bo'yicha savol bering!`;
       }
 
       setChatMessages((prev) => [...prev, { sender: 'ai', text: reply, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]);
@@ -733,7 +775,67 @@ export const AiMentorAssistant: React.FC<AiMentorAssistantProps> = ({
 
             {/* Results Presentation (Right) */}
             <div className="lg:col-span-7 space-y-6">
-              {matcherResult ? (
+              {matcherError ? (
+                <div className="bg-rose-50/95 dark:bg-rose-950/40 rounded-3xl p-6 sm:p-8 border-2 border-rose-300 dark:border-rose-800/80 shadow-card space-y-6 animate-fadeIn text-left">
+                  {/* Error Header */}
+                  <div className="flex items-center space-x-3 pb-4 border-b border-rose-200 dark:border-rose-900/60">
+                    <div className="w-12 h-12 rounded-2xl bg-rose-600 text-white flex items-center justify-center flex-shrink-0 shadow-md">
+                      <AlertTriangle className="w-6 h-6 animate-pulse" />
+                    </div>
+                    <div>
+                      <div className="inline-flex items-center space-x-1.5 text-xs font-black uppercase tracking-wider text-rose-600 dark:text-rose-400">
+                        <span>⚠️</span>
+                        <span>Xatolik: Mos ustoz topilmadi</span>
+                      </div>
+                      <h4 className="text-lg sm:text-xl font-black text-rose-950 dark:text-rose-100">
+                        Bunday yo'nalish yoki ustoz mavjud emas!
+                      </h4>
+                    </div>
+                  </div>
+
+                  {/* Error Details */}
+                  <div className="space-y-3 bg-white/80 dark:bg-slate-900/80 p-5 rounded-2xl border border-rose-200 dark:border-rose-900/40">
+                    <p className="text-xs sm:text-sm text-slate-800 dark:text-slate-200 leading-relaxed font-medium">
+                      Kechirasiz, siz kiritgan <span className="font-black text-rose-600 dark:text-rose-400 bg-rose-100 dark:bg-rose-900/50 px-2 py-0.5 rounded-md">"{matcherError.query}"</span> so'rovi bo'yicha UstozPro platformasida hozircha mos ustoz, dars yoki mutaxassislik topilmadi.
+                    </p>
+                    <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                      Iltimos, mavzuni aniqroq yozing (masalan: <b>osh damlash</b>, <b>algebrik kasrlar</b>, <b>ingliz tili</b>, <b>dasturlash</b>, <b>avtomexanika</b> va h.k.) yoki quyidagi taklif etilgan mavzulardan birini tanlang:
+                    </p>
+                  </div>
+
+                  {/* Quick Valid Suggestions */}
+                  <div className="space-y-2">
+                    <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide block">
+                      Mavjud sohalar (ustiga bosing):
+                    </span>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                      {sampleChips.slice(0, 6).map((sample, sIdx) => (
+                        <button
+                          key={sIdx}
+                          type="button"
+                          onClick={() => handleSelectSample(sample.text)}
+                          className="text-left p-3 rounded-xl bg-white dark:bg-slate-800 hover:bg-violet-50 dark:hover:bg-violet-950/50 text-slate-800 dark:text-slate-200 text-xs font-semibold transition border border-rose-200/80 dark:border-rose-900/30 flex items-center gap-2.5 cursor-pointer shadow-2xs hover:border-violet-300"
+                        >
+                          <span className="text-base">{sample.icon}</span>
+                          <span className="truncate">{sample.text}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Try Again Button */}
+                  <div className="pt-2">
+                    <button
+                      type="button"
+                      onClick={() => { setMatcherError(null); setGoalText(''); }}
+                      className="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs transition shadow-sm cursor-pointer flex items-center gap-2"
+                    >
+                      <RotateCcw className="w-3.5 h-3.5" />
+                      <span>Qaytadan to'g'ri kiritish</span>
+                    </button>
+                  </div>
+                </div>
+              ) : matcherResult ? (
                 <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-violet-200 dark:border-violet-900/60 shadow-card space-y-6 animate-fadeIn">
                   
                   {/* Result Header */}

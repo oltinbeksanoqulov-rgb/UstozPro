@@ -221,12 +221,22 @@ export function App() {
     return true;
   });
 
+  const searchTokens = q.split(/\s+/).filter((t) => t.length > 1);
+  const matchSearchText = (text?: string) => {
+    if (!text) return false;
+    const t = text.toLowerCase();
+    if (t.includes(q)) return true;
+    return searchTokens.some((tok) => tok.length > 2 && t.includes(tok));
+  };
+
   const searchResultsMentors = q
     ? MENTORS.filter(
         (m) =>
-          m.name.toLowerCase().includes(q) ||
-          m.title.toLowerCase().includes(q) ||
-          m.skills.some((s) => s.toLowerCase().includes(q))
+          matchSearchText(m.name) ||
+          matchSearchText(m.title) ||
+          matchSearchText(m.bio) ||
+          matchSearchText(m.category) ||
+          m.skills.some((s) => matchSearchText(s))
       )
     : [];
 
