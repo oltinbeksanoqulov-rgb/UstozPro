@@ -24,6 +24,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   setSearchQuery,
   onSelectMentor,
   onSelectCourse,
+  onStartAiConsultant,
   lang = 'uz',
 }) => {
   const t = translations[lang].hero;
@@ -143,10 +144,15 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       </div>
 
       {/* TOP-RIGHT PILL BADGE: UstozPro AI Live Ekotizimi */}
-      <div className="absolute top-4 sm:top-5 right-4 sm:right-6 md:right-8 z-30 flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-black/55 backdrop-blur-md border border-emerald-500/40 text-[11px] font-semibold text-emerald-300 shadow-xl">
+      <button 
+        type="button"
+        onClick={onStartAiConsultant}
+        className="absolute top-4 sm:top-5 right-4 sm:right-6 md:right-8 z-30 flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-black/55 hover:bg-black/80 backdrop-blur-md border border-emerald-500/40 hover:border-emerald-400 text-[11px] font-semibold text-emerald-300 shadow-xl cursor-pointer transition transform hover:scale-105 active:scale-95"
+        title="AI Ustoz & Navigatorga o'tish"
+      >
         <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
         <span className="tracking-wide">{t.aiEcosystem}</span>
-      </div>
+      </button>
 
 
 

@@ -165,8 +165,8 @@ export const Navbar: React.FC<NavbarProps> = ({
               );
             })}
 
-            {/* Startap Feature Badges - shown on 2xl */}
-            <div className="hidden 2xl:flex items-center space-x-2 pl-1">
+            {/* Startap Feature Badges - shown on xl+ */}
+            <div className="hidden xl:flex items-center space-x-1.5 pl-1">
               <button
                 onClick={() => setActiveTab('gigs')}
                 className={`px-2.5 py-1 rounded-full text-xs font-bold transition flex items-center gap-1 ${
@@ -395,6 +395,12 @@ export const Navbar: React.FC<NavbarProps> = ({
               className="p-3 rounded-xl bg-red-50 dark:bg-red-950/40 text-red-900 dark:text-red-300 text-left font-bold"
             >
               🔴 {t.badgeLive}
+            </button>
+            <button
+              onClick={() => { setActiveTab('ai'); setMobileMenuOpen(false); }}
+              className="p-3 rounded-xl bg-violet-50 dark:bg-violet-950/40 text-violet-900 dark:text-violet-300 text-left font-bold"
+            >
+              🤖 AI Ustoz
             </button>
             <button
               onClick={() => {
