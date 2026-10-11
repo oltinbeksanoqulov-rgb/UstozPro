@@ -49,22 +49,33 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   }, []);
 
   const q = (inputValue || '').toLowerCase().trim();
+  const tokens = q.split(/\s+/).filter((t) => t.length > 1);
+
+  const matchesText = (text?: string) => {
+    if (!text) return false;
+    const t = text.toLowerCase();
+    if (t.includes(q)) return true;
+    return tokens.some((tok) => tok.length > 2 && t.includes(tok));
+  };
 
   const matchingMentors = q
     ? MENTORS.filter(
         (m) =>
-          m.name.toLowerCase().includes(q) ||
-          m.title.toLowerCase().includes(q) ||
-          m.skills.some((s) => s.toLowerCase().includes(q))
+          matchesText(m.name) ||
+          matchesText(m.title) ||
+          matchesText(m.bio) ||
+          matchesText(m.category) ||
+          m.skills.some((s) => matchesText(s))
       )
     : [];
 
   const matchingCourses = q
     ? COURSES.filter(
         (c) =>
-          c.title.toLowerCase().includes(q) ||
-          c.instructor.toLowerCase().includes(q) ||
-          c.categoryName.toLowerCase().includes(q)
+          matchesText(c.title) ||
+          matchesText(c.instructor) ||
+          matchesText(c.categoryName) ||
+          matchesText(c.description)
       )
     : [];
 
